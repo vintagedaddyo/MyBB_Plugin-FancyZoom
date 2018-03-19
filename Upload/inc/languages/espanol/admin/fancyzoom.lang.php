@@ -15,7 +15,7 @@
 // plugin_info
 
 $l['fancyzoom_Name'] = 'FancyZoom';
-$l['fancyzoom_Desc'] = 'Open images and thumbnails with FancyZoom.';
+$l['fancyzoom_Desc'] = 'Abra imágenes y miniaturas con FancyZoom.';
 $l['fancyzoom_Web'] = 'http://mods.mybboard.net/view/fancyzoom';
 $l['fancyzoom_Auth'] = 'Sebastian Wunderlich & Vintagedaddyo';
 $l['fancyzoom_AuthSite'] = 'http://community.mybb.com/user-6029.html';
