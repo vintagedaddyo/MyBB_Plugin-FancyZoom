@@ -8,11 +8,12 @@
  *
  * MyBB Version: 1.8
  *
- * Plugin Version: 1.4
+ * Plugin Version: 1.5
  * 
  */
 
 // Disallow direct access to this file for security reasons
+
 if(!defined("IN_MYBB"))
 {
 	die("Direct initialization of this file is not allowed.<br /><br />Please make sure IN_MYBB is defined.");
@@ -64,9 +65,18 @@ function fancyzoom($page)
 	}
     if(THIS_SCRIPT=="portal.php")
     {
-
-    {
-    $page=str_replace("</head>",'<script type="text/javascript" src="'.$mybb->settings["bburl"].'/jscripts/fancyzoom/FancyZoom.js"></script>
+        $query = $db->query("
+        SELECT t.tid, t.fid, t.uid, t.lastpost, t.lastposteruid, t.lastposter, t.subject, t.replies, t.views, u.username
+        FROM ".TABLE_PREFIX."threads t
+        LEFT JOIN ".TABLE_PREFIX."users u ON (u.uid=t.uid)
+        WHERE 1=1 {$excludeforums}{$tunviewwhere} AND t.visible='1' AND t.closed NOT LIKE 'moved|%'
+        ORDER BY t.lastpost DESC
+        LIMIT 0, ".$mybb->settings['portal_showdiscussionsnum']);       
+        $thread = $db->fetch_array($query);
+        $forumpermissions = forum_permissions($thread['fid']);
+        if(!empty($thread)&&$forumpermissions["candlattachments"]==1)
+        {
+            $page=str_replace("</head>",'<script type="text/javascript" src="'.$mybb->settings["bburl"].'/jscripts/fancyzoom/FancyZoom.js"></script>
 <script type="text/javascript" src="'.$mybb->settings["bburl"].'/jscripts/fancyzoom/FancyZoomHTML.js"></script>
 </head>',$page);
            $page=preg_replace('/\<body(.*)\>/Usi','<body$1 onload="setupZoom()">',$page);
@@ -74,8 +84,6 @@ function fancyzoom($page)
            return $page;
         }
     }
-
-
 }
 
 ?>
